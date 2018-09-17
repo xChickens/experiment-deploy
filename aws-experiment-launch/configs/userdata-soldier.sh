@@ -3,6 +3,20 @@
 mkdir -p /home/ec2-user
 cd /home/ec2-user/
 
+(
+	set -eu
+	curl -L -O https://artifacts.elastic.co/downloads/beats/metricbeat/metricbeat-6.4.0-x86_64.rpm
+	sudo yum -y install patch
+	rpm -vi metricbeat-6.4.0-x86_64.rpm
+	cd /etc/metricbeat
+	unset -v region az
+	az=$(curl http://169.254.169.254/2018-08-17/meta-data/placement/availability-zone)
+	region="${az%[a-z]}"
+	aws s3 cp "s3://harmony-node-configs/metricbeat/${region}.tar.xz" - | tar -xvJf- -C/
+	systemctl enable metricbeat.service
+	systemctl start metricbeat.service
+) > /tmp/metricbeat-setup.log 2>&1
+
 BUCKET=unique-bucket-bin
 FOLDER=ec2-user/
 
