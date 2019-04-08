@@ -304,7 +304,7 @@ EOT
    fi
 }
 
-# TODO: get it working for multiple shards
+# banjo branch only handle one shard
 function do_wallet_ini
 {
    SECTION=default
@@ -320,17 +320,15 @@ function do_wallet_ini
    done
    local shards=$(wc -l ${THEPWD}/logs/$TS/all-leaders.txt | cut -f1 -d' ')
    echo "shards = $shards" >> $INI
-   local n=0
-   while [ $n -lt $shards ]; do
-      echo >> $INI
-      echo "[$SECTION.shard$n.rpc]" >> $INI
-      leader=$(grep leader ${THEPWD}/logs/$TS/distribution_config.txt | cut -f1 -d' ')
-      echo "rpc = $leader:14555" >> $INI
-      for v in $(grep od ${THEPWD}/logs/$TS/distribution_config.txt | cut -f1 -d' '); do
-         echo "rpc = $v:14555" >> $INI
-      done
-      (( n++ ))
+
+   echo >> $INI
+   echo "[$SECTION.shard0.rpc]" >> $INI
+   leader=$(grep leader ${THEPWD}/logs/$TS/distribution_config.txt | cut -f1 -d' ' | head -n 1)
+   echo "rpc = $leader:14555" >> $INI
+   for ip in $(ls ${THEPWD}/logs/$TS/validator/tmp_log/log-$TS/validator-*.log |  awk -F/ '{ print $NF }' | awk -F- '{ print $2 }' | sort -R | head -n 5); do 
+      echo "rpc = $ip:14555" >> $INI
    done
+
 }
 
 function do_all
