@@ -32,6 +32,7 @@ This script automates the benchmark test based on profile.
    deinit         sync logs & terminate instances
    reset          reset dashboard and explorer
    bootnode       launch bootnode(s) only
+   wallet         generate wallet.ini file
    all            do everything (default)
 
 
@@ -303,6 +304,35 @@ EOT
    fi
 }
 
+# TODO: get it working for multiple shards
+function do_wallet_ini
+{
+   SECTION=default
+
+   [ ! -e $SESSION_FILE ] && errexit "can't find profile config file : $SESSION_FILE"
+   TS=$(cat $SESSION_FILE | $JQ .sessionID)
+
+   INI=${THEPWD}/logs/$TS/wallet.ini
+   echo "[$SECTION]" > $INI
+   for bnf in $(ls ${THEPWD}/logs/$TS/bootnode*-ma.txt); do
+      bn=$(cat $bnf)
+      echo "bootnode = $bn" >> $INI
+   done
+   local shards=$(wc -l ${THEPWD}/logs/$TS/all-leaders.txt | cut -f1 -d' ')
+   echo "shards = $shards" >> $INI
+   local n=0
+   while [ $n -lt $shards ]; do
+      echo >> $INI
+      echo "[$SECTION.shard$n.rpc]" >> $INI
+      leader=$(grep leader ${THEPWD}/logs/$TS/distribution_config.txt | cut -f1 -d' ')
+      echo "rpc = $leader:14555" >> $INI
+      for v in $(grep od ${THEPWD}/logs/$TS/distribution_config.txt | cut -f1 -d' '); do
+         echo "rpc = $v:14555" >> $INI
+      done
+      (( n++ ))
+   done
+}
+
 function do_all
 {
    do_launch_bootnode
@@ -384,6 +414,8 @@ case $ACTION in
          do_deinit ;;
    reset)
          do_reset ;;
+   wallet)
+         do_wallet_ini ;;
 esac
 
 exit 0
