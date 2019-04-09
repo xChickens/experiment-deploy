@@ -258,9 +258,11 @@ function analyze_logs
 function do_sync_logs
 {
    wait
+   logging sync log to s3
    aws s3 sync logs/$TS s3://harmony-benchmark/logs/$TS 2>&1 > /dev/null
    S3URL=s3://harmony-benchmark/logs/$TS
    echo s3://harmony-benchmark/logs/$TS
+   expense s3_sync
 }
 
 function do_deinit
@@ -329,6 +331,7 @@ function do_wallet_ini
       echo "rpc = $ip:14555" >> $INI
    done
 
+   echo Please use $INI for your wallet to access the blockchain!
 }
 
 function do_all
@@ -344,7 +347,7 @@ function do_all
    if [ "$KEEP" == "false" ]; then
       do_deinit
    fi
-
+   do_wallet_ini
    echo all logs are uploaded to
    echo $S3URL
 }
