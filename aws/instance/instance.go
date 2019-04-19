@@ -104,6 +104,7 @@ type InstanceConfig struct {
 	Number     int    `json:"ondemand"`
 	Spot       int    `json:"spot"`
 	AmiName    string `json:"ami",omitempty`
+	Root       int64  `json:"root",omitempty`
 }
 
 // LaunchConfig is the struct having all launch configuration
@@ -283,6 +284,10 @@ func getInstancesInput(reg *Region, i *InstanceConfig, regs *AWSRegions, instTyp
 	case onDemand:
 		tagValue := fmt.Sprintf("%s-%s-od-%s", reg.Code, *tag, now)
 
+		rootVolume := ec2.EbsBlockDevice{
+			VolumeSize: &i.Root,
+		}
+
 		input = ec2.RunInstancesInput{
 			ImageId:          aws.String(amiID),
 			InstanceType:     aws.String(i.Type),
@@ -302,6 +307,12 @@ func getInstancesInput(reg *Region, i *InstanceConfig, regs *AWSRegions, instTyp
 				},
 			},
 			UserData: &userDataString,
+			BlockDeviceMappings: []*ec2.BlockDeviceMapping{
+				{
+					DeviceName: aws.String("/dev/xvda"),
+					Ebs:        &rootVolume,
+				},
+			},
 		}
 		if _, ok := myInstancesTag.Load(tagValue); !ok {
 			myInstancesTag.Store(tagValue, reg.Code)
