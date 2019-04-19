@@ -57,8 +57,8 @@
     "reset": "false"
   },
   "explorer": {
-    "server": "54.213.59.51",
-    "name": "explorer.harmony.one",
+    "server": "18.236.168.100",
+    "name": "1.harmony.one",
     "port": 4444,
     "reset": "true"
   },
@@ -70,7 +70,7 @@
   "parallel": 110,
   "userdata": "userdata-soldier-http.sh",
   "flow": {
-     "wait_for_launch": 20
+     "wait_for_launch": 120
   },
   "libp2p": true
 }

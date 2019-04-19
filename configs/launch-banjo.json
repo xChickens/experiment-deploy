@@ -3,30 +3,18 @@
       {
          "region": "pdx",
          "type": "t3.small",
-         "ondemand": 10,
+         "ondemand": 22,
          "ami": "default",
-         "spot": 12
+         "spot": 0,
+         "root": "20G"
       },
       {
          "region": "iad",
          "type": "t3.small",
-         "ondemand": 10,
+         "ondemand": 22,
          "ami": "default",
-         "spot": 12
-      },
-      {
-         "region": "dub",
-         "type": "t3.small",
-         "ondemand": 2,
-         "ami": "default",
-         "spot": 0
-      },
-      {
-         "region": "sin",
-         "type": "t3.small",
-         "ondemand": 2,
-         "ami": "default",
-         "spot": 0
+         "spot": 0,
+         "root": "20G"
       }
    ],
    "userdata": {
