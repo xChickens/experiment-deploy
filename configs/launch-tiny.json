@@ -4,7 +4,7 @@
          "region": "iad",
          "type": "t3.micro",
          "ondemand": 1,
-         "spot": 25
+         "spot": 0
       }
    ],
    "userdata": {

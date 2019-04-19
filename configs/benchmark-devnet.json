@@ -6,9 +6,10 @@
     "regions": "pdx"
   },
   "leader": {
-    "num_vm": 1,
-    "type": "t3.medium",
-    "regions": "pdx"
+    "num_vm": 2,
+    "type": "t3.large",
+    "regions": "pdx,iad",
+    "root": 8
   },
   "bootnode": {
      "enable": true,

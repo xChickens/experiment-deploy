@@ -6,7 +6,7 @@
          "ondemand": 22,
          "ami": "default",
          "spot": 0,
-         "root": "20G"
+         "root": 20
       },
       {
          "region": "iad",
@@ -14,7 +14,7 @@
          "ondemand": 22,
          "ami": "default",
          "spot": 0,
-         "root": "20G"
+         "root": 20
       }
    ],
    "userdata": {
