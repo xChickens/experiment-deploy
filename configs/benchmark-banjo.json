@@ -71,7 +71,7 @@
   "parallel": 110,
   "userdata": "userdata-soldier-http.sh",
   "flow": {
-     "wait_for_launch": 120
+     "wait_for_launch": 20
   },
   "libp2p": true
 }
